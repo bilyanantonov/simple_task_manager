@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
@@ -26,11 +29,44 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   CalendarController _calendarController;
+  TextEditingController _eventController;
+  Map<DateTime, List<dynamic>> _events;
+  List<dynamic> _selectedEvents;
+  SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
     _calendarController = CalendarController();
+    _eventController = TextEditingController();
+    _events = {};
+    _selectedEvents = [];
+    initPrefs();
+  }
+
+  initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _events = Map<DateTime, List<dynamic>>.from(
+          decodeMap(json.decode(prefs.getString("events") ?? "{}")));
+    });
+  }
+
+  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
+    Map<String, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[key.toString()] = map[key];
+    });
+
+    return newMap;
+  }
+
+  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
+    Map<DateTime, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[DateTime.parse(key)] = map[key];
+    });
+    return newMap;
   }
 
   @override
@@ -55,14 +91,16 @@ class _HomePageState extends State<HomePage> {
                   "Daily",
                   style: TextStyle(fontSize: 32),
                 ),
-                SizedBox(height:10),
-                Text("Task Report", style: TextStyle(fontSize: 32,fontWeight: FontWeight.bold))
+                SizedBox(height: 10),
+                Text("Task Report",
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TableCalendar(
+              events: _events,
               initialCalendarFormat: CalendarFormat.month,
               calendarStyle: CalendarStyle(
                 todayColor: Colors.orange,
@@ -89,7 +127,9 @@ class _HomePageState extends State<HomePage> {
                   weekendStyle: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold)),
               onDaySelected: (date, events) {
-                print(date.toIso8601String());
+                setState(() {
+                  _selectedEvents = events;
+                });
               },
               builders: CalendarBuilders(
                   selectedDayBuilder: (context, date, events) => Container(
@@ -113,9 +153,47 @@ class _HomePageState extends State<HomePage> {
                       ))),
               calendarController: _calendarController,
             ),
-          )
+          ),
+          ..._selectedEvents.map((event) => ListTile(title: Text(event)))
         ],
       )),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _showAddDialog();
+          }),
     );
+  }
+
+  _showAddDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              content: TextField(
+                controller: _eventController,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Save"),
+                  onPressed: () {
+                    if (_eventController.text.isEmpty) return;
+                    if (_events[_calendarController.selectedDay] != null) {
+                      _events[_calendarController.selectedDay]
+                          .add(_eventController.text);
+                    } else {
+                      _events[_calendarController.selectedDay] = [
+                        _eventController.text
+                      ];
+                    }
+                    prefs.setString("events", json.encode(encodeMap(_events)));
+                    _eventController.clear();
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
+    setState(() {
+      _selectedEvents = _events[_calendarController.selectedDay];
+    });
   }
 }
