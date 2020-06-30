@@ -68,10 +68,22 @@
       "languageVersion": "2.2"
     },
     {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
       "name": "image",
       "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image-2.1.12",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/intl-0.16.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.5"
     },
     {
       "name": "matcher",
@@ -104,6 +116,36 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "shared_preferences",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shared_preferences-0.5.7+3",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_macos",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shared_preferences_macos-0.0.1+10",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_platform_interface",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_web",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+7",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "simple_gesture_detector",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/simple_gesture_detector-0.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///C:/src/flutter/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -132,6 +174,12 @@
       "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/string_scanner-1.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "table_calendar",
+      "rootUri": "file:///C:/Users/ercan/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/table_calendar-2.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
     },
     {
       "name": "term_glyph",
@@ -170,7 +218,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-06-30T20:08:10.628416Z",
+  "generated": "2020-06-30T20:14:27.473416Z",
   "generator": "pub",
   "generatorVersion": "2.8.4"
 }
