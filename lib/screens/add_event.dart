@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_task_manager/models/event.dart';
 import 'package:simple_task_manager/services/db_service.dart';
+import 'package:simple_task_manager/utils/database_helper.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -9,9 +10,10 @@ class AddEvent extends StatefulWidget {
 
 class _AddEventState extends State<AddEvent> {
   DbService dbService;
+  DatabaseHelper databaseHelper;
   final _formKey = GlobalKey<FormState>();
 
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = TextStyle(fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   DateTime _eventDate;
@@ -22,6 +24,7 @@ class _AddEventState extends State<AddEvent> {
   void initState() {
     super.initState();
     dbService = DbService();
+    databaseHelper = DatabaseHelper();
     _title = TextEditingController();
     _description = TextEditingController();
     _eventDate = DateTime.now();
@@ -114,7 +117,7 @@ class _AddEventState extends State<AddEvent> {
                       SizedBox(height: 10.0),
                       ListTile(
                         title: Text("Time of Task"),
-                        subtitle: Text(_time.toString()),
+                        subtitle: Text(_time.format(context)),
                         onTap: () async {
                           TimeOfDay picked = await showTimePicker(
                               context: context, initialTime: _time);
@@ -142,10 +145,16 @@ class _AddEventState extends State<AddEvent> {
                                       setState(() {
                                         processing = true;
                                       });
-                                      await dbService.addEvent(EventModel(
+                                      // await dbService.addEvent(EventModel(
+                                      //     title: _title.text,
+                                      //     description: _description.text,
+                                      //     eventDate: _eventDate,
+                                      //     time: _time));
+                                      await databaseHelper.addTask(EventModel(
                                           title: _title.text,
                                           description: _description.text,
-                                          eventDate: _eventDate));
+                                          eventDate: _eventDate,
+                                          time: _time));
 
                                       setState(() {
                                         processing = false;

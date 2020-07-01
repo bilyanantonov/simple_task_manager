@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_task_manager/models/event.dart';
 import 'package:simple_task_manager/screens/add_event.dart';
 import 'package:simple_task_manager/services/db_service.dart';
+import 'package:simple_task_manager/utils/database_helper.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> _nextEvents;
   SharedPreferences prefs;
   DbService dbService;
+  DatabaseHelper databaseHelper;
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     _events = {};
     _selectedEvents = [];
     dbService = DbService();
+    databaseHelper = DatabaseHelper();
     initPrefs();
   }
 
@@ -60,6 +63,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   initPrefs() async {
+    // List<EventModel> _events = await databaseHelper.getTaskList();
+    // setState(() {
+    //   _events = 
+    // });
     // prefs = await SharedPreferences.getInstance();
     // setState(() {
     //   _events = Map<DateTime, List<dynamic>>.from(
@@ -88,7 +95,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<EventModel>>(
-          future: dbService.getEvents(),
+          // future: dbService.getEvents(),
+          future: databaseHelper.getTaskList(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<EventModel> allEvents = snapshot.data;
@@ -196,9 +204,8 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Container(
                             child: Text(
-                          event.eventDate.hour.toString() +
-                              ' : ' +
-                              event.eventDate.minute.toString(),
+                          event.time.format(context),
+                          // event.time.toString(),
                           style: TextStyle(fontSize: 16),
                         )),
                         Container(
@@ -242,15 +249,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   _awaitReturnValueFromAddEvent() async {
-     await Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => AddEvent(),
         ));
 
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   _showAddDialog() async {

@@ -1,34 +1,43 @@
-class EventModel{
+import 'package:flutter/material.dart';
+
+class EventModel {
   final String id;
   final String title;
   final String description;
   final DateTime eventDate;
+  final TimeOfDay time;
 
-  EventModel({this.id,this.title, this.description, this.eventDate});
+  EventModel(
+      {this.id, this.title, this.description, this.eventDate, this.time});
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
-      title: data['title'],
-      description: data['description'],
-      eventDate: data['event_date'],
-    );
+        title: data['title'],
+        description: data['description'],
+        eventDate: DateTime.parse(data['eventDate']),
+        time: TimeOfDay(
+            hour: int.parse(data['time'].split(":")[0]),
+            minute: int.parse(data['time'].split(":")[1])));
   }
 
-  factory EventModel.froJson(String id, Map<String,dynamic> data) {
+  factory EventModel.fromJson(String id, Map<String, dynamic> data) {
     return EventModel(
-      id: id,
-      title: data['title'],
-      description: data['description'],
-      eventDate: data['event_date'].toDate(),
-    );
+        id: id,
+        title: data['title'],
+        description: data['description'],
+        eventDate: data['eventDate'].toDate(),
+        time: TimeOfDay(
+            hour: data['time'].split(":")[0],
+            minute: data['time'].split(":")[1]));
   }
 
-  Map<String,dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      "title":title,
+      "id": id,
+      "title": title,
       "description": description,
-      "event_date":eventDate,
-      "id":id,
+      "eventDate": eventDate,
+      "time": time
     };
   }
 }
