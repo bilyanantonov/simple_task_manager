@@ -61,7 +61,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getTasks() async {
     var db = await _getDatabase();
-    var result = await db.query("task");
+    var result = await db.query("task", orderBy: "time ASC");
     return result;
   }
 
@@ -75,7 +75,6 @@ class DatabaseHelper {
   }
 
   Future<int> addTask(EventModel eventModel) async {
-
     EventDTO eventDTO = EventDTO();
     eventDTO.title = eventModel.title;
     eventDTO.description = eventModel.description;
@@ -89,6 +88,28 @@ class DatabaseHelper {
     var result = await db.insert("task", eventDTO.toMap());
 
     print(eventDTO.time.toString());
+    return result;
+  }
+
+  Future<int> updateTask(EventModel eventModel) async {
+    EventDTO eventDTO = EventDTO();
+    eventDTO.id = eventModel.id;
+    eventDTO.title = eventModel.title;
+    eventDTO.description = eventModel.description;
+    eventDTO.eventDate = eventModel.eventDate.toString();
+    eventDTO.time = (eventModel.time.hour.toString() +
+        ':' +
+        eventModel.time.minute.toString());
+
+    var db = await _getDatabase();
+    var result = await db.update("task", eventDTO.toMap(),
+        where: 'id = ?', whereArgs: [eventModel.id]);
+    return result;
+  }
+
+  Future<int> deleteTask(int id) async {
+    var db = await _getDatabase();
+    var result = await db.delete("task", where: 'id = ?', whereArgs: [id]);
     return result;
   }
 }

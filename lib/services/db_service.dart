@@ -14,7 +14,7 @@ class DbService {
     int idRandom = Random().nextInt(pow(2, 31));
 
     eventList.add(EventModel(
-        id: idRandom.toString(),
+        id: idRandom,
         title: event.title + idRandom.toString(),
         description: event.description + idRandom.toString(),
         eventDate: event.eventDate));

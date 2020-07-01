@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   initPrefs() async {
     // List<EventModel> _events = await databaseHelper.getTaskList();
     // setState(() {
-    //   _events = 
+    //   _events =
     // });
     // prefs = await SharedPreferences.getInstance();
     // setState(() {
@@ -195,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.symmetric(horizontal: 32),
                     child: Text(
                       'Daily Tasks',
-                      style: TextStyle(fontSize: 20),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     )),
                 ..._selectedEvents.map((event) => Container(
                     padding: EdgeInsets.symmetric(horizontal: 32),
@@ -208,30 +209,35 @@ class _HomePageState extends State<HomePage> {
                           // event.time.toString(),
                           style: TextStyle(fontSize: 16),
                         )),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            alignment: Alignment.center,
-                            height: 100,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.teal[300],
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  event.title,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  event.description,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
-                              ],
-                            ))
+                        GestureDetector(
+                          onTap: () {
+                            _awaitReturnValueFromAddEventForUpdate(event);
+                          },
+                          child: Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              padding: EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                  color: Colors.teal[300],
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    event.title,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    event.description,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              )),
+                        )
                       ],
                     )))
               ],
@@ -256,6 +262,30 @@ class _HomePageState extends State<HomePage> {
         ));
 
     setState(() {});
+  }
+
+  _reloadPage() async {
+    print("reload");
+    await new Future.delayed(const Duration(milliseconds: 0));
+    Navigator.of(context, rootNavigator: false).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => HomePage(),
+          transitionDuration: Duration(seconds: 0),
+        ),
+        (Route<dynamic> route) => false);
+  }
+
+  _awaitReturnValueFromAddEventForUpdate(EventModel event) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddEvent(
+            event: event,
+          ),
+        ));
+
+    setState(() {});
+    _reloadPage();
   }
 
   _showAddDialog() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EventModel {
-  final String id;
+  final int id;
   final String title;
   final String description;
   final DateTime eventDate;
@@ -12,6 +12,7 @@ class EventModel {
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
+        id: data['id'],
         title: data['title'],
         description: data['description'],
         eventDate: DateTime.parse(data['eventDate']),
@@ -20,7 +21,7 @@ class EventModel {
             minute: int.parse(data['time'].split(":")[1])));
   }
 
-  factory EventModel.fromJson(String id, Map<String, dynamic> data) {
+  factory EventModel.fromJson(int id, Map<String, dynamic> data) {
     return EventModel(
         id: id,
         title: data['title'],

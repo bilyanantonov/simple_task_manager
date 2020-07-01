@@ -1,5 +1,5 @@
 class EventDTO {
-  final String id;
+  int id;
   String title;
   String description;
   String eventDate;
