@@ -141,6 +141,7 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                           padding: EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 8.0),
                           child: TextFormField(
+                            
                             controller: _title,
                             validator: validateTextInput,
                             style: style,
@@ -170,7 +171,7 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                         ),
                         SizedBox(height: 10.0),
                         ListTile(
-                          title: Text("Date of Task"),
+                          title: Text("Select Date of Task"),
                           subtitle: Text(
                               "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
                           onTap: () async {
@@ -188,7 +189,7 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                         ),
                         SizedBox(height: 10.0),
                         ListTile(
-                          title: Text("Time of Task"),
+                          title: Text("Select Time of Task"),
                           subtitle: Text(_time.format(context)),
                           onTap: () async {
                             TimeOfDay picked = await showTimePicker(

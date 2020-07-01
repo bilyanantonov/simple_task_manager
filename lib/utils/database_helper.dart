@@ -87,7 +87,7 @@ class DatabaseHelper {
     var db = await _getDatabase();
     var result = await db.insert("task", eventDTO.toMap());
 
-    print(eventDTO.time.toString());
+    print(eventDTO.time.toString() + " --- " + eventDTO.eventDate.toString());
     return result;
   }
 
