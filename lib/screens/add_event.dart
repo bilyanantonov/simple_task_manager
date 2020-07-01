@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:simple_task_manager/custom_widgets/custom_button.dart';
+import 'package:simple_task_manager/mixins/validation_mixin.dart';
 import 'package:simple_task_manager/models/event.dart';
 import 'package:simple_task_manager/services/db_service.dart';
 import 'package:simple_task_manager/utils/database_helper.dart';
@@ -11,7 +13,7 @@ class AddEvent extends StatefulWidget {
   _AddEventState createState() => _AddEventState();
 }
 
-class _AddEventState extends State<AddEvent> {
+class _AddEventState extends State<AddEvent> with ValidationMixin {
   DbService dbService;
   DatabaseHelper databaseHelper;
   final _formKey = GlobalKey<FormState>();
@@ -53,44 +55,57 @@ class _AddEventState extends State<AddEvent> {
   }
 
   void saveTask() async {
-    if (addNewTask) {
-      await databaseHelper.addTask(EventModel(
-          title: _title.text,
-          description: _description.text,
-          eventDate: _eventDate,
-          time: _time));
-    } else {
-      await databaseHelper.updateTask(EventModel(
-          id: widget.event.id,
-          title: _title.text,
-          description: _description.text,
-          eventDate: _eventDate,
-          time: _time));
-    }
+    try {
+      if (addNewTask) {
+        await databaseHelper.addTask(EventModel(
+            title: _title.text,
+            description: _description.text,
+            eventDate: _eventDate,
+            time: _time));
+      } else {
+        await databaseHelper.updateTask(EventModel(
+            id: widget.event.id,
+            title: _title.text,
+            description: _description.text,
+            eventDate: _eventDate,
+            time: _time));
+      }
 
-    setState(() {
-      processing = false;
-    });
-    await _onBackPressed();
+      setState(() {
+        processing = false;
+      });
+      await _goBack();
+    } catch (e) {
+      print("Error $e");
+    }
   }
 
   void deleteTask() async {
-    await databaseHelper.deleteTask(widget.event.id);
-    setState(() {
-      processing = false;
-    });
-    await _onBackPressed();
+    try {
+      await databaseHelper.deleteTask(widget.event.id);
+      setState(() {
+        processing = false;
+      });
+      await _goBack();
+    } catch (e) {
+      print("Error $e");
+    }
   }
 
-  Future<bool> _onBackPressed() async {
+  Future<bool> _goBack() async {
     Navigator.of(context).pop(true);
+    return false;
+  }
+
+  Future<bool> _onBackPressedWithButton() async {
+    Navigator.of(context).pop(false);
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressed,
+      onWillPop: _onBackPressedWithButton,
       child: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -103,7 +118,7 @@ class _AddEventState extends State<AddEvent> {
               child: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context);
+                    _onBackPressedWithButton();
                   }),
             ),
             Container(
@@ -127,8 +142,7 @@ class _AddEventState extends State<AddEvent> {
                               horizontal: 16.0, vertical: 8.0),
                           child: TextFormField(
                             controller: _title,
-                            validator: (value) =>
-                                (value.isEmpty) ? "Please Enter title" : null,
+                            validator: validateTextInput,
                             style: style,
                             decoration: InputDecoration(
                                 labelText: "Title",
@@ -146,9 +160,7 @@ class _AddEventState extends State<AddEvent> {
                             controller: _description,
                             minLines: 3,
                             maxLines: 5,
-                            validator: (value) => (value.isEmpty)
-                                ? "Please Enter description"
-                                : null,
+                            validator: validateTextInput,
                             style: style,
                             decoration: InputDecoration(
                                 labelText: "description",
@@ -199,11 +211,10 @@ class _AddEventState extends State<AddEvent> {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: <Widget>[
-                                    Material(
-                                      elevation: 5.0,
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      color: Theme.of(context).primaryColor,
-                                      child: MaterialButton(
+                                    CustomButton(
+                                        buttonText: buttonText,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         onPressed: () async {
                                           if (_formKey.currentState
                                               .validate()) {
@@ -211,46 +222,23 @@ class _AddEventState extends State<AddEvent> {
                                               processing = true;
                                             });
                                             saveTask();
-                                            // await dbService.addEvent(EventModel(
-                                            //     title: _title.text,
-                                            //     description: _description.text,
-                                            //     eventDate: _eventDate,
-                                            //     time: _time));
-
                                           }
-                                        },
-                                        child: Text(
-                                          buttonText,
-                                          style: style.copyWith(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
+                                        }),
                                     SizedBox(height: 10.0),
                                     Container(
                                       child: !addNewTask
-                                          ? Material(
-                                              elevation: 5.0,
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0),
-                                              color: Colors.redAccent,
-                                              child: MaterialButton(
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    processing = true;
-                                                  });
-                                                  deleteTask();
-                                                },
-                                                child: Text(
-                                                  "Delete",
-                                                  style: style.copyWith(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            )
+                                          ? CustomButton(
+                                              buttonText: "Delete",
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              buttonColor: Colors.redAccent,
+                                              onPressed: () async {
+                                                setState(() {
+                                                  processing = true;
+                                                });
+                                                deleteTask();
+                                              })
                                           : Container(),
                                     ),
                                   ],

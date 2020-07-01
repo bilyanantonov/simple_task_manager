@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _eventController;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
-  List<dynamic> _nextEvents;
   SharedPreferences prefs;
   DbService dbService;
   DatabaseHelper databaseHelper;
+  bool valueFromAddEvent = false;
 
   @override
   void initState() {
@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage> {
     _selectedEvents = [];
     dbService = DbService();
     databaseHelper = DatabaseHelper();
-    initPrefs();
   }
 
   Map<DateTime, List<dynamic>> _fromModelToEvent(List<EventModel> events) {
@@ -60,18 +59,6 @@ class _HomePageState extends State<HomePage> {
       data[date].add(event);
     });
     return data;
-  }
-
-  initPrefs() async {
-    // List<EventModel> _events = await databaseHelper.getTaskList();
-    // setState(() {
-    //   _events =
-    // });
-    // prefs = await SharedPreferences.getInstance();
-    // setState(() {
-    //   _events = Map<DateTime, List<dynamic>>.from(
-    //       decodeMap(json.decode(prefs.getString("events") ?? "{}")));
-    // });
   }
 
   Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
@@ -89,6 +76,46 @@ class _HomePageState extends State<HomePage> {
       newMap[DateTime.parse(key)] = map[key];
     });
     return newMap;
+  }
+
+  _awaitReturnValueFromAddEvent() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddEvent(),
+        ));
+
+    setState(() {
+      
+    });
+  }
+
+  _awaitReturnValueFromAddEventForUpdate(EventModel event) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddEvent(
+            event: event,
+          ),
+        ));
+
+    setState(() {
+      valueFromAddEvent = result;
+      if (valueFromAddEvent) {
+        _reloadPage();
+      }
+    });
+  }
+
+  _reloadPage() async {
+    print("reload");
+    await new Future.delayed(const Duration(milliseconds: 0));
+    Navigator.of(context, rootNavigator: false).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => HomePage(),
+          transitionDuration: Duration(seconds: 0),
+        ),
+        (Route<dynamic> route) => false);
   }
 
   @override
@@ -252,40 +279,6 @@ class _HomePageState extends State<HomePage> {
             // _showAddDialog();
           }),
     );
-  }
-
-  _awaitReturnValueFromAddEvent() async {
-    await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddEvent(),
-        ));
-
-    setState(() {});
-  }
-
-  _reloadPage() async {
-    print("reload");
-    await new Future.delayed(const Duration(milliseconds: 0));
-    Navigator.of(context, rootNavigator: false).pushAndRemoveUntil(
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => HomePage(),
-          transitionDuration: Duration(seconds: 0),
-        ),
-        (Route<dynamic> route) => false);
-  }
-
-  _awaitReturnValueFromAddEventForUpdate(EventModel event) async {
-    await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddEvent(
-            event: event,
-          ),
-        ));
-
-    setState(() {});
-    _reloadPage();
   }
 
   _showAddDialog() async {
