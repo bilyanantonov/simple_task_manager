@@ -17,8 +17,6 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
   DbService dbService;
   DatabaseHelper databaseHelper;
   final _formKey = GlobalKey<FormState>();
-
-  TextStyle style = TextStyle(fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   DateTime _eventDate;
@@ -135,6 +133,7 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                     context: context,
                     removeTop: true,
                     child: ListView(
+                      physics: BouncingScrollPhysics(),
                       // crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Padding(
@@ -144,7 +143,6 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                             
                             controller: _title,
                             validator: validateTextInput,
-                            style: style,
                             decoration: InputDecoration(
                                 labelText: "Title",
                                 filled: true,
@@ -162,7 +160,6 @@ class _AddEventState extends State<AddEvent> with ValidationMixin {
                             minLines: 3,
                             maxLines: 5,
                             validator: validateTextInput,
-                            style: style,
                             decoration: InputDecoration(
                                 labelText: "description",
                                 border: OutlineInputBorder(

@@ -85,9 +85,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => AddEvent(),
         ));
 
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   _awaitReturnValueFromAddEventForUpdate(EventModel event) async {
@@ -132,188 +130,160 @@ class _HomePageState extends State<HomePage> {
               }
             }
             return SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  alignment: Alignment.bottomLeft,
-                  height: 80,
-                  child: IconButton(
-                      icon: Icon(Icons.arrow_back), onPressed: () {}),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Daily",
-                        style: TextStyle(fontSize: 32),
-                      ),
-                      SizedBox(height: 10),
-                      Text("Task Report",
-                          style: TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TableCalendar(
-                    events: _events,
-                    initialCalendarFormat: CalendarFormat.month,
-                    calendarStyle: CalendarStyle(
-                      todayColor: Theme.of(context).primaryColor,
-                      selectedColor: Theme.of(context).primaryColor,
-                      todayStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                          color: Colors.white),
-                      weekendStyle:
-                          TextStyle(color: Colors.black.withOpacity(0.3)),
-                      outsideDaysVisible: false,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      alignment: Alignment.bottomLeft,
+                      height: 80,
+                      child: IconButton(
+                          icon: Icon(Icons.arrow_back), onPressed: () {}),
                     ),
-                    headerStyle: HeaderStyle(
-                        centerHeaderTitle: true,
-                        formatButtonDecoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(20.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Daily",
+                            style: TextStyle(fontSize: 32),
+                          ),
+                          SizedBox(height: 10),
+                          Text("Task Report",
+                              style: TextStyle(
+                                  fontSize: 32, fontWeight: FontWeight.bold))
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TableCalendar(
+                        events: _events,
+                        initialCalendarFormat: CalendarFormat.month,
+                        calendarStyle: CalendarStyle(
+                          todayColor: Theme.of(context).primaryColor,
+                          selectedColor: Theme.of(context).primaryColor,
+                          todayStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                              color: Colors.white),
+                          weekendStyle:
+                              TextStyle(color: Colors.black.withOpacity(0.3)),
+                          outsideDaysVisible: false,
                         ),
-                        formatButtonTextStyle: TextStyle(color: Colors.white),
-                        formatButtonShowsNext: false),
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    daysOfWeekStyle: DaysOfWeekStyle(
-                        weekdayStyle: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                        weekendStyle: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                    onDaySelected: (date, events) {
-                      setState(() {
-                        _selectedEvents = events;
-                      });
-                    },
-                    builders: CalendarBuilders(
-                        selectedDayBuilder: (context, date, events) =>
-                            Container(
-                                margin: EdgeInsets.all(4),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    shape: BoxShape.circle),
-                                child: Text(
-                                  date.day.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                )),
-                        todayDayBuilder: (context, date, enevts) => Container(
-                            margin: EdgeInsets.all(4),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.teal.shade300,
-                                shape: BoxShape.circle),
-                            child: Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ))),
-                    calendarController: _calendarController,
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child: Text(
-                      'Daily Tasks',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
-                ..._selectedEvents.map((event) => Container(
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                            child: Text(
-                          event.time.format(context),
-                          // event.time.toString(),
-                          style: TextStyle(fontSize: 16),
+                        headerStyle: HeaderStyle(
+                            centerHeaderTitle: true,
+                            formatButtonDecoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            formatButtonTextStyle:
+                                TextStyle(color: Colors.white),
+                            formatButtonShowsNext: false),
+                        startingDayOfWeek: StartingDayOfWeek.monday,
+                        daysOfWeekStyle: DaysOfWeekStyle(
+                            weekdayStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            weekendStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        onDaySelected: (date, events) {
+                          setState(() {
+                            _selectedEvents = events;
+                          });
+                        },
+                        builders: CalendarBuilders(
+                            selectedDayBuilder: (context, date, events) =>
+                                Container(
+                                    margin: EdgeInsets.all(4),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context).primaryColor,
+                                        shape: BoxShape.circle),
+                                    child: Text(
+                                      date.day.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                            todayDayBuilder: (context, date, enevts) =>
+                                Container(
+                                    margin: EdgeInsets.all(4),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Colors.teal.shade300,
+                                        shape: BoxShape.circle),
+                                    child: Text(
+                                      date.day.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
+                        calendarController: _calendarController,
+                      ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.symmetric(horizontal: 32),
+                        child: Text(
+                          'Daily Tasks',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         )),
-                        GestureDetector(
-                          onTap: () {
-                            _awaitReturnValueFromAddEventForUpdate(event);
-                          },
-                          child: Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              padding: EdgeInsets.all(10),
-                              alignment: Alignment.center,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                  color: Colors.teal[300],
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    event.title,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    event.description,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ],
-                              )),
-                        )
-                      ],
-                    )))
-              ],
-            ));
+                    ..._selectedEvents.map((event) => Container(
+                        padding: EdgeInsets.symmetric(horizontal: 32),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                                child: Text(
+                              event.time.format(context),
+                              // event.time.toString(),
+                              style: TextStyle(fontSize: 16),
+                            )),
+                            GestureDetector(
+                              onTap: () {
+                                _awaitReturnValueFromAddEventForUpdate(event);
+                              },
+                              child: Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.center,
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                      color: Colors.teal[300],
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black26,
+                                            offset: Offset(0, 2),
+                                            blurRadius: 2.0)
+                                      ]),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        event.title,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        event.description,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ],
+                                  )),
+                            )
+                          ],
+                        )))
+                  ],
+                ));
           }),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             _awaitReturnValueFromAddEvent();
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => AddEvent()));
-            // _showAddDialog();
           }),
     );
-  }
-
-  _showAddDialog() async {
-    await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              content: TextField(
-                controller: _eventController,
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Save"),
-                  onPressed: () {
-                    // dbService.addEvent();
-                    Navigator.pop(context);
-                    setState(() {});
-                    // if (_eventController.text.isEmpty) return;
-                    // if (_events[_calendarController.selectedDay] != null) {
-                    //   _events[_calendarController.selectedDay]
-                    //       .add(_eventController.text);
-                    // } else {
-                    //   _events[_calendarController.selectedDay] = [
-                    //     _eventController.text
-                    //   ];
-                    // }
-                    // prefs.setString("events", json.encode(encodeMap(_events)));
-
-                    // _eventController.clear();
-                    // Navigator.pop(context);
-                  },
-                )
-              ],
-            ));
-    // setState(() {
-    //   _selectedEvents = _events[_calendarController.selectedDay];
-    // });
   }
 }

@@ -1,4 +1,4 @@
-#Wed Jul 01 20:06:16 EET 2020
+#Wed Jul 01 20:53:56 EET 2020
 base.0=D\:\\Github\\simple_task_manager\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
